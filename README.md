@@ -1,3 +1,6 @@
+This is a fork of Scaffold-ETH 2; see below for those details from that great project. This repo integrates Base's Agentkit and a chat component to use OpenAI's API; in the Next app, copy `.env.example` to a `.env.local` file for local development. For deploying to Vercel, you'll have to set those env variables per Vercel's docs for production deploys.
+
+****************************************
 # 🏗 Scaffold-ETH 2
 
 <h4 align="center">
