@@ -1,6 +1,6 @@
 "use client";
 
-import React, { KeyboardEvent, useState } from "react";
+import React, { KeyboardEvent, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
@@ -8,10 +8,34 @@ import { AgentData, ChatMessage } from "./ui/types/agent";
 import ReactMarkdown from "react-markdown";
 
 const AgentInterface = () => {
-  const [mode, setMode] = useState<"chat" | "auto" | null>(null);
+  // const [mode, setMode] = useState<"chat" | "auto" | null>(null);
+  const mode = "chat";
+  const setMode = () => {};
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const STORAGE_KEY = "chat";
+
+  useEffect(() => {
+    const storedMessages = localStorage.getItem(STORAGE_KEY);
+    if (storedMessages) {
+      try {
+        const parsedMessages: ChatMessage[] = JSON.parse(storedMessages);
+        setMessages(parsedMessages);
+      } catch (error) {
+        console.error("Error parsing messages from localStorage:", error);
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }, [messages]);
 
   const initializeAgent = async (): Promise<AgentData> => {
     try {
@@ -206,4 +230,3 @@ const AgentInterface = () => {
 };
 
 export default AgentInterface;
-
